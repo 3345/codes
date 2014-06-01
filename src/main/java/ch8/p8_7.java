@@ -2,9 +2,6 @@ package ch8;
 
 import org.junit.Test;
 
-import java.util.List;
-import java.util.Set;
-
 public class p8_7 {
     public static int change(int amount, int nomination) {
         int nextNom = 0;
