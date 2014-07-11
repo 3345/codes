@@ -44,4 +44,11 @@ public class p2_5 {
         linkedList.print(20);
         System.out.println("\n" + beginningOfLoop(linkedList).data);
     }
+
+    @Test
+    public void t1() {
+        int i = 1/2;
+        System.out.println(i);
+    }
+
 }
