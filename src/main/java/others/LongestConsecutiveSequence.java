@@ -16,49 +16,38 @@ import java.util.*;
 
 public class LongestConsecutiveSequence {
     public int longestConsecutive(int[] num) {
-        int longest = 0;
-        Map<Integer, LinkedList<Integer>> table = new HashMap<Integer, LinkedList<Integer>>();
-        for (int i = 0; i < num.length; i ++) {
-            if (table.containsKey(num[i]))
-                continue;
+        Set<Integer> set = new HashSet<Integer>();
+        int max = 1;
 
-            LinkedList<Integer> small = table.get(num[i] - 1);
-            LinkedList<Integer> big = table.get(num[i] + 1);
+        for (int e : num)
+            set.add(e);
 
-            if (big == null && small == null) {
-                LinkedList<Integer> list = new LinkedList<Integer>(Arrays.asList(num[i]));
-                table.put(num[i], list);
-                longest = Math.max(longest, 1);
-                continue;
+        for (int e : num) {
+            int left = e - 1;
+            int right = e + 1;
+            int count = 1;
+
+            while (set.contains(left)) {
+                count++;
+                set.remove(left);
+                left--;
             }
 
-            if (big != null && small != null) {
-                small.add(num[i]);
-                small.addAll(big);
-                table.put(num[i] + 1, small);
-                table.put(num[i], small);
-                longest = Math.max(longest, small.size());
-                continue;
+            while (set.contains(right)) {
+                count++;
+                set.remove(right);
+                right++;
             }
 
-            if (big != null) {
-                big.add(num[i]);
-                table.put(num[i], big);
-                longest = Math.max(longest, big.size());
-            }
-
-            if (small != null) {
-                small.add(num[i]);
-                table.put(num[i], small);
-                longest = Math.max(longest, small.size());
-            }
+            max = Math.max(count, max);
         }
-        return longest;
+
+        return max;
     }
 
     @Test
     public void t() {
-        int[] a = {-1,1,0};
+        int[] a = {-4,-1,4,-5,1,-6,9,0,2,7,-3,8,-2,5,3};
         System.out.println(longestConsecutive(a));
     }
 
