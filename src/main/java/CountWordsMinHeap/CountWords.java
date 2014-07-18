@@ -16,7 +16,7 @@ public class CountWords {
     public List<String> order(String text, int num) {
         List<String> result = new ArrayList<String>();
 
-        if (text == null)
+        if (text == null || num <= 0)
             return result;
 
         HashMap<String, Integer> frequencyMap = new HashMap<String, Integer>();

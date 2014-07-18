@@ -28,6 +28,14 @@ public class CountWordsTest {
     }
 
     @Test
+    public void returnEmptyList_whenNumberIsLessOrEqualToZero() {
+        List<String> result = countWords.order("ab c", 0);
+        assertTrue(result.isEmpty());
+        result = countWords.order("ab c", -9);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
     public void returnEmptyList_whenInputIsNull() {
         List<String> result = countWords.order(null, 10);
         assertTrue(result.isEmpty());
@@ -35,7 +43,7 @@ public class CountWordsTest {
 
     @Test
     public void simpleUseCase() {
-        String text = "good bad better better worst good bad bad bad bad";
+        String text = "good bad better better worst good bad bad bad good bad";
         List<String> expected = new ArrayList<String>(Arrays.asList("bad", "good", "better", "worst"));
         assertEquals(expected, countWords.order(text, 10));
     }
@@ -43,14 +51,14 @@ public class CountWordsTest {
     @Test
     public void leadingTrailingNonLetter() {
         String text = "#good bad better better worst good bad bad bad bad$";
-        List<String> expected = new ArrayList<String>(Arrays.asList("bad", "good", "better", "worst"));
+        List<String> expected = new ArrayList<String>(Arrays.asList("bad", "better", "good", "worst"));
         assertEquals(expected, countWords.order(text, 10));
     }
 
     @Test
     public void nonCharactersInBetweenWords() {
-        String text = "goo6d bad better ** be tter worst=-good bad bad bad bad";
-        List<String> expected = new ArrayList<String>(Arrays.asList("bad", "good", "tter", "worst", "goo", "be", "d", "better"));
+        String text = "goo6d bad **  worst=-good bad bad bad bad";
+        List<String> expected = new ArrayList<String>(Arrays.asList("bad", "goo", "worst", "good", "d"));
         assertEquals(expected, countWords.order(text, 10));
     }
 
