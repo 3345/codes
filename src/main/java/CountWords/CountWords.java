@@ -13,7 +13,6 @@ public class CountWords {
 
         HashMap<String, Integer> frequencyMap = new HashMap<String, Integer>();
         List[] orderedArray = new List[textLen];
-        MaxHeap maxHeap = new MaxHeap();
 
         StringBuilder sb = new StringBuilder();
 
