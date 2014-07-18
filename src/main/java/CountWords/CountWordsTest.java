@@ -10,9 +10,6 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by yfu on 7/17/14.
- */
 public class CountWordsTest {
     CountWords countWords;
 

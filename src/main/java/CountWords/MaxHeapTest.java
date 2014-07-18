@@ -5,9 +5,6 @@ import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
-/**
- * Created by yfu on 7/17/14.
- */
 public class MaxHeapTest {
     @Test
     public void remove_shouldReturnWordOfHighestFrequency() {

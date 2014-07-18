@@ -2,9 +2,6 @@ package CountWords;
 
 import java.util.*;
 
-/**
- * Created by yfu on 7/17/14.
- */
 public class CountWords {
     public List<String> order(String text) {
         List<String> result = new ArrayList<String>();

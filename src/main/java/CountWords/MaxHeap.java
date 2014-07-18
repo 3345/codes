@@ -3,9 +3,6 @@ package CountWords;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-/**
- * Created by yfu on 7/17/14.
- */
 public class MaxHeap {
     PriorityQueue<Node> heap;
 
