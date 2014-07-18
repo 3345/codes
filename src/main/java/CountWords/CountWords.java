@@ -9,12 +9,15 @@ public class CountWords {
         if (text == null)
             return result;
 
+        int textLen = text.length();
+
         HashMap<String, Integer> frequencyMap = new HashMap<String, Integer>();
+        List[] orderedArray = new List[textLen];
         MaxHeap maxHeap = new MaxHeap();
 
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < text.length(); i ++) {
+        for (int i = 0; i < textLen; i ++) {
             char c = Character.toLowerCase(text.charAt(i));
             if (!Character.isLetter(c)) {
                 if (sb.length() == 0)
@@ -35,11 +38,19 @@ public class CountWords {
         }
 
         for (String word : frequencyMap.keySet()) {
-            maxHeap.add(word, frequencyMap.get(word));
+            int frequency = frequencyMap.get(word).intValue();
+            if (orderedArray[frequency] == null) {
+                ArrayList<String> list = new ArrayList<String>();
+                list.add(word);
+                orderedArray[frequency] = list;
+            } else {
+                orderedArray[frequency].add(word);
+            }
         }
 
-        while (!maxHeap.isEmpty()) {
-            result.add(maxHeap.remove());
+        for (int i = textLen - 1; i >=0; i --) {
+            if (orderedArray[i] != null)
+                result.addAll(orderedArray[i]);
         }
 
         return result;

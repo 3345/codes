@@ -33,21 +33,21 @@ public class CountWordsTest {
     @Test
     public void simpleUseCase() {
         String text = "good bad better better worst good bad bad bad bad";
-        List<String> expected = new ArrayList<String>(Arrays.asList("bad", "good", "better", "worst"));
+        List<String> expected = new ArrayList<String>(Arrays.asList("bad", "better", "good", "worst"));
         assertEquals(expected, countWords.order(text));
     }
 
     @Test
     public void leadingTrailingNonLetter() {
         String text = "#good bad better better worst good bad bad bad bad$";
-        List<String> expected = new ArrayList<String>(Arrays.asList("bad", "good", "better", "worst"));
+        List<String> expected = new ArrayList<String>(Arrays.asList("bad", "better", "good", "worst"));
         assertEquals(expected, countWords.order(text));
     }
 
     @Test
     public void nonCharactersInBetweenWords() {
-        String text = "goo6d bad better ** be tter worst=-good bad bad bad bad";
-        List<String> expected = new ArrayList<String>(Arrays.asList("bad", "good", "tter", "worst", "goo", "be", "d", "better"));
+        String text = "goo6d better ** worst=-good bad bad bad bad";
+        List<String> expected = new ArrayList<String>(Arrays.asList("bad", "better", "d", "goo", "worst", "good"));
         assertEquals(expected, countWords.order(text));
     }
 
