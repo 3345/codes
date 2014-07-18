@@ -3,6 +3,11 @@ package CountWords;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -56,5 +61,28 @@ public class CountWordsTest {
         String text = "Good, good, Hi, HI, hI";
         List<String> expected = new ArrayList<String>(Arrays.asList("hi", "good"));
         assertEquals(expected, countWords.order(text));
+    }
+
+    @Test
+    public void bigFile() throws Exception {
+        String text = readFile();
+        List<String> list = countWords.order(text);
+        System.out.println(list.size());
+        System.out.println(list);
+    }
+
+    private String readFile() throws Exception {
+        File file = new File("/Users/yfu/Downloads/codes/src/main/java/CountWords/big.txt");
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line = null;
+        StringBuilder stringBuilder = new StringBuilder();
+        String ls = System.getProperty("line.separator");
+
+        while((line = reader.readLine()) != null) {
+            stringBuilder.append(line);
+            stringBuilder.append(ls);
+        }
+
+        return stringBuilder.toString();
     }
 }

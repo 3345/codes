@@ -12,7 +12,7 @@ public class CountWords {
         int textLen = text.length();
 
         HashMap<String, Integer> frequencyMap = new HashMap<String, Integer>();
-        List[] orderedArray = new List[textLen];
+        List[] orderedBucket = new List[textLen];
 
         StringBuilder sb = new StringBuilder();
 
@@ -38,18 +38,18 @@ public class CountWords {
 
         for (String word : frequencyMap.keySet()) {
             int frequency = frequencyMap.get(word).intValue();
-            if (orderedArray[frequency] == null) {
+            if (orderedBucket[frequency] == null) {
                 ArrayList<String> list = new ArrayList<String>();
                 list.add(word);
-                orderedArray[frequency] = list;
+                orderedBucket[frequency] = list;
             } else {
-                orderedArray[frequency].add(word);
+                orderedBucket[frequency].add(word);
             }
         }
 
         for (int i = textLen - 1; i >=0; i --) {
-            if (orderedArray[i] != null)
-                result.addAll(orderedArray[i]);
+            if (orderedBucket[i] != null)
+                result.addAll(orderedBucket[i]);
         }
 
         return result;
