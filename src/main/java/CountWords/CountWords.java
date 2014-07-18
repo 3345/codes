@@ -18,6 +18,10 @@ public class CountWords {
 
         for (int i = 0; i < textLen; i ++) {
             char c = Character.toLowerCase(text.charAt(i));
+            /*
+             *  Numbers are not considered words, i.e 19th, 1st, 2nd will be
+             *  considered as th, st, nd
+             */
             if (!Character.isLetter(c)) {
                 if (sb.length() == 0)
                     continue;
@@ -47,7 +51,7 @@ public class CountWords {
             }
         }
 
-        for (int i = textLen - 1; i >=0; i --) {
+        for (int i = textLen - 1; i >= 0; i --) {
             if (orderedBucket[i] != null)
                 result.addAll(orderedBucket[i]);
         }
@@ -64,6 +68,4 @@ public class CountWords {
             map.put(s, frequency + 1);
         }
     }
-
-
 }
