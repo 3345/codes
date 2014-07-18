@@ -25,13 +25,13 @@ public class CountWordsTest {
 
     @Test
     public void returnEmptyList_whenInputIsEmptyString() {
-        List<String> result = countWords.order("");
+        List<String> result = countWords.order("", 10);
         assertTrue(result.isEmpty());
     }
 
     @Test
     public void returnEmptyList_whenInputIsNull() {
-        List<String> result = countWords.order(null);
+        List<String> result = countWords.order(null, 10);
         assertTrue(result.isEmpty());
     }
 
@@ -39,34 +39,34 @@ public class CountWordsTest {
     public void simpleUseCase() {
         String text = "good bad better better worst good bad bad bad bad";
         List<String> expected = new ArrayList<String>(Arrays.asList("bad", "better", "good", "worst"));
-        assertEquals(expected, countWords.order(text));
+        assertEquals(expected, countWords.order(text, 10));
     }
 
     @Test
     public void leadingTrailingNonLetter() {
         String text = "#good bad better better worst good bad bad bad bad$";
         List<String> expected = new ArrayList<String>(Arrays.asList("bad", "better", "good", "worst"));
-        assertEquals(expected, countWords.order(text));
+        assertEquals(expected, countWords.order(text, 10));
     }
 
     @Test
     public void nonCharactersInBetweenWords() {
         String text = "goo6d better ** worst=-good bad bad bad bad";
         List<String> expected = new ArrayList<String>(Arrays.asList("bad", "better", "d", "goo", "worst", "good"));
-        assertEquals(expected, countWords.order(text));
+        assertEquals(expected, countWords.order(text, 10));
     }
 
     @Test
     public void ingoreCase() {
         String text = "Good, good, Hi, HI, hI";
         List<String> expected = new ArrayList<String>(Arrays.asList("hi", "good"));
-        assertEquals(expected, countWords.order(text));
+        assertEquals(expected, countWords.order(text, 10));
     }
 
     @Test
     public void bigFile() throws Exception {
         String text = readFile();
-        List<String> list = countWords.order(text);
+        List<String> list = countWords.order(text, 3);
         System.out.println(list.size());
         System.out.println(list);
     }

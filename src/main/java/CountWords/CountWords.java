@@ -3,7 +3,7 @@ package CountWords;
 import java.util.*;
 
 public class CountWords {
-    public List<String> order(String text) {
+    public List<String> order(String text, int num) {
         List<String> result = new ArrayList<String>();
 
         if (text == null)
@@ -40,6 +40,8 @@ public class CountWords {
             updateFrequency(frequencyMap, s);
         }
 
+        TreeMap<String, Integer> treeMap = new TreeMap<String, Integer>(frequencyMap);
+
         for (String word : frequencyMap.keySet()) {
             int frequency = frequencyMap.get(word).intValue();
             if (orderedBucket[frequency] == null) {
@@ -52,8 +54,13 @@ public class CountWords {
         }
 
         for (int i = textLen - 1; i >= 0; i --) {
-            if (orderedBucket[i] != null)
-                result.addAll(orderedBucket[i]);
+            if (orderedBucket[i] != null) {
+                for (Object word : orderedBucket[i]) {
+                    result.add((String)word);
+                    if (result.size() == num)
+                        return result;
+                }
+            }
         }
 
         return result;
