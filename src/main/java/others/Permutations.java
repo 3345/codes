@@ -1,5 +1,7 @@
 package others;
 
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,5 +39,11 @@ public class Permutations {
             }
         }
         return result;
+    }
+
+    @Test
+    public void test1() {
+        int [] a = {1,2,3};
+        System.out.println(permute(a));
     }
 }

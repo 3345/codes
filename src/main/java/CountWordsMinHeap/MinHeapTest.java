@@ -4,9 +4,6 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static CountWordsMinHeap.MinHeap.*;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
 
 public class MinHeapTest {
     @Test

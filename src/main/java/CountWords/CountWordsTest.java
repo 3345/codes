@@ -66,7 +66,7 @@ public class CountWordsTest {
     @Test
     public void bigFile() throws Exception {
         String text = readFile();
-        List<String> list = countWords.order(text, 3);
+        List<String> list = countWords.order(text, 100);
         System.out.println(list.size());
         System.out.println(list);
     }

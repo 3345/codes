@@ -71,7 +71,7 @@ public class CountWordsTest {
 
     @Test
     public void bigFile() throws Exception {
-        int num = 3;
+        int num = 99999;
         String text = readFile();
         List<String> list = countWords.order(text, num);
         System.out.println(list.size());

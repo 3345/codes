@@ -3,6 +3,7 @@ package others;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -55,6 +56,12 @@ public class Combinations {
     @Test
     public void test1() {
         System.out.println(combine(5,2));
+    }
+
+    @Test
+    public void test2() {
+        List<Integer> list = new ArrayList<Integer>(Arrays.asList(1,1,2,2));
+        System.out.println(comb(2, list));
     }
 
 }
