@@ -6,7 +6,11 @@ import org.junit.Test;
  *  a1 a2 a3 a4
  *  b1 b2 b3 b4
  */
-public class TwoSortedArrayMedian {
+public class MedianofTwoSortedArrays {
+    public double findMedianSortedArrays(int A[], int B[]) {
+        return find(A, 0, A.length - 1, B, 0, B.length, (A.length + B.length)/2);
+    }
+
     public int find(int[] a1, int start1, int end1, int[] a2, int start2, int end2, int k) {
         int m1 = (end1 + start1 + 1)/2;
         int m2 = (end2 + start2 + 1)/2;
