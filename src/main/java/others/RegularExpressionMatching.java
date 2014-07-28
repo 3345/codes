@@ -87,7 +87,8 @@ public class RegularExpressionMatching {
             }
 
         }
-        return false;
+        //si == s.length()
+        return isMatch(s, p, s.length(), pi + 2);
     }
 
     @Test
