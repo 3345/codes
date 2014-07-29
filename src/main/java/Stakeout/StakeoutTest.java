@@ -35,7 +35,7 @@ public class StakeoutTest {
     }
 
     @Test
-    public void skipTwoValues_ifTwoLargerNumberAreSeperatedByTwo() {
+    public void skipTwoValues_ifTwoLargerNumberAreSeparatedByTwo() {
         int[] a = {1, 100, 4, 2, 100, 0, 1, 2};
         assertEquals(202, Stakeout.maxReturn(a));
     }
