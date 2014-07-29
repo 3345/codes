@@ -4,7 +4,7 @@ public class Stakeout {
     /**
      * @param homeValues non-negative {@code int[]}
      * @return the maximum sum of a subset of elements in {@code int[]} homeValues
-     *  where any non of elements in the subset can be adjacent.
+     *  where none of elements in the subset can be adjacent.
      *  Return 0 if {@code int[]} homeValues is null.
      */
     public static int maxReturn(int[] homeValues) {
