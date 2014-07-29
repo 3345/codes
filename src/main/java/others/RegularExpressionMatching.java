@@ -26,17 +26,12 @@ import static org.junit.Assert.assertTrue;
  isMatch("aab", "c*a*b") → true
  */
 
-
-
-//wrong!!!
 public class RegularExpressionMatching {
     public boolean isMatch(String s, String p) {
         return isMatch(s, p, 0, 0);
     }
 
     public boolean isMatch(String s, String p, int si, int pi) {
-        if (si == s.length() && pi == p.length())
-            return true;
         if (si == s.length()) {
             for (int i = pi; i < p.length(); i += 2) {
                 if (i == p.length() - 1)
@@ -47,22 +42,8 @@ public class RegularExpressionMatching {
             return true;
         }
 
-        if (pi == p.length()) {
-            if (si == s.length())
-                return true;
-            if (pi - 2 < 0)
-                return false;
-            if (p.charAt(pi - 1) == '*') {
-                if (p.charAt(pi - 2) == '.')
-                    return true;
-                for (int i = si; i < s.length(); i ++) {
-                    if (s.charAt(i) != p.charAt(pi - 2))
-                        return false;
-                }
-                return true;
-            }
-            return false;
-        }
+        if (pi == p.length())
+            return si == s.length();
 
         char sc = s.charAt(si);
         char pc = p.charAt(pi);
@@ -87,7 +68,7 @@ public class RegularExpressionMatching {
             }
 
         }
-        //si == s.length()
+        //s is exhausted
         return isMatch(s, p, s.length(), pi + 2);
     }
 
