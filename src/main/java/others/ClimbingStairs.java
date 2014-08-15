@@ -1,6 +1,7 @@
 package others;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  You are climbing a stair case. It takes n steps to reach to the top.
@@ -23,4 +24,5 @@ public class ClimbingStairs {
         }
         return list.get(n - 1);
     }
+
 }

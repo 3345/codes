@@ -14,13 +14,11 @@ public class UniquePaths {
         return path(m,n,0,0,mem);
     }
     public int path(int m, int n, int x, int y, int[][] mem) {
-        if (x == m - 1 && y >= n - 2)
-            return 1;
-        if (y == n - 1 && x >= n - 1)
-            return 1;
-
         if (mem[y][x] != 0)
             return mem[y][x];
+
+        if (x == m - 1 && y == n - 1)
+            return 1;
 
         int result = 0;
         if (x + 1 <= m - 1) {
@@ -35,7 +33,7 @@ public class UniquePaths {
 
     @Test
     public void test() {
-        System.out.println(uniquePaths(1,1));
+        System.out.println(uniquePaths(33,13));
     }
 
 }
