@@ -22,9 +22,12 @@ public class DecodeWays {
             return 0;
 
         int [] ways = new int[s.length()];
+
         ways[0] = 1;
+
         for (int i = 1; i < s.length(); i++) {
             int num = Integer.parseInt(s.substring(i - 1, i + 1));
+
             if (s.charAt(i) == '0') {
                 if (num > 26 || num <= 0)
                     return 0;

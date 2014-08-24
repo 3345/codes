@@ -44,7 +44,7 @@ public class StringSetsTest {
 
     @Test
     public void returnFalse_whenNotTheSame_ContainNulls() {
-        String[][] sets = {{"ab",null},{"ab"},{null, "ab", "ab"}};
+        String[][] sets = {{"ab",null},{"ab"}};
         assertFalse(StringSets.allStringSetsIdentical(sets));
     }
 
