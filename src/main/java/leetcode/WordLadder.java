@@ -1,8 +1,12 @@
 package leetcode;
 
-import org.junit.Test;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
-import java.util.*;
+import org.junit.Test;
 
 /**
 Given two words (start and end), and a dictionary, find the length of shortest transformation sequence from start
@@ -28,44 +32,42 @@ public class WordLadder {
         }
     }
 
-    public int ladderLength(String start, String end, Set<String> dict) {
-        this.end = end;
+    public int ladderLength(String beginWord, String endWord, Set<String> wordListgu) {
+        LinkedList<String> wq = new LinkedList<>();
+        LinkedList<Integer> dq = new LinkedList<>();
+        wordList.add(endWord);
 
-        if (!dict.contains(start) || !dict.contains(end))
-            return 0;
+        wq.add(beginWord);
+        dq.add(1);
 
-        LinkedList<Node> queue = new LinkedList();
 
-        List<String> visited = new ArrayList<String>();
-        visited.add(start);
-        queue.addFirst(new Node(visited, start));
+        while(!wq.isEmpty()) {
+            String cur = wq.remove();
+            Integer d = dq.remove();
 
-        while (!queue.isEmpty()) {
-            Node node = queue.poll();
-
-            if (canTransform(node.word, end)) {
-                return node.visited.size() + 1;
+            if (cur.equals(endWord)) {
+                return d;
             }
 
-            for (String s : dict) {
-                if (!node.visited.contains(s) && canTransform(s, node.word)) {
-                    node.word = s;
-                    node.visited.add(s);
-                    queue.offer(node);
+            char[] charArr = cur.toCharArray();
+
+            for (int i = 0; i < cur.length(); i++) {
+                for (char c = 'a'; c <= 'z'; c++) {
+                    char orig = charArr[i];
+                    charArr[i] = c;
+                    String newCurr = new String(charArr);
+                    charArr[i] = orig;
+                    if (wordList.contains(newCurr)) {
+                        wq.add(newCurr);
+                        dq.add(d + 1);
+                        wordList.remove(newCurr);
+                    }
                 }
             }
-//            for (String s : dict) {
-//                if (s.equals(end) && canTransform(node.word, s))
-//                    return node.visited.size() + 1;
-//
-//                if (!node.visited.contains(s) && canTransform(node.word, s)) {
-//                    ArrayList<String> nextVisited = new ArrayList<String>();
-//                    nextVisited.addAll(node.visited);
-//                    nextVisited.add(s);
-//                    queue.addFirst(new Node(nextVisited, s));
-//                }
-//            }
+
+
         }
+
         return 0;
     }
 
@@ -100,6 +102,12 @@ public class WordLadder {
     public void t3() {
         Set<String> set = new HashSet<String>(Arrays.asList("hot", "dog"));
         System.out.println(ladderLength("hot", "dog", set));
+    }
+
+    @Test
+    public void t4() {
+        Set<String> set = new HashSet<String>(Arrays.asList("hot","dot","dog","lot","log"));
+        System.out.println(ladderLength("hit", "cog", set));
     }
 
     @Test
