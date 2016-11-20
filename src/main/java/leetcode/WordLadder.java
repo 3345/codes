@@ -32,7 +32,7 @@ public class WordLadder {
         }
     }
 
-    public int ladderLength(String beginWord, String endWord, Set<String> wordListgu) {
+    public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
         LinkedList<String> wq = new LinkedList<>();
         LinkedList<Integer> dq = new LinkedList<>();
         wordList.add(endWord);
