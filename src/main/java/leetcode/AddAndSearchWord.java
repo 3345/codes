@@ -1,9 +1,9 @@
 package leetcode;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import org.junit.Test;
 
 /**
  * Created by fyl on 11/20/16.
@@ -15,7 +15,7 @@ public class AddAndSearchWord {
     public class Node {
         public Character c = null;
         public Map<Character, Node> children = new HashMap<>();
-        public Boolean t;
+        public boolean t;
 
         public Node() {}
 
@@ -34,7 +34,7 @@ public class AddAndSearchWord {
 
         Node cur = this.root;
 
-        for (int i = 9; i < arr.length; i++) {
+        for (int i = 0; i < arr.length; i++) {
             Character c = arr[i];
             if (!cur.children.containsKey(c)) {
                 Node n = new Node(c);
@@ -66,20 +66,24 @@ public class AddAndSearchWord {
             return false;
         }
 
-        if (i == target.length - 1 && root.t) {
-            return true;
-        }
-
-        if (target[i] != '.' && target[i] != root.c) {
-            return false;
-        } else {
-            for (Map.Entry<Character, Node> entry : root.children.entrySet()) {
-                if (doSearch(target, i + 1, entry.getValue())) {
+        for (Map.Entry<Character, Node> entry : root.children.entrySet()) {
+            if (entry.getValue().c == target[i] || target[i] == '.') {
+                if (i == target.length - 1) {
+                    return entry.getValue().t;
+                } else if(doSearch(target, i + 1, entry.getValue())) {
                     return true;
                 }
             }
+
         }
 
         return false;
+    }
+
+    @Test
+    public void t0() {
+        AddAndSearchWord obj = new AddAndSearchWord();
+        obj.addWord("a");
+        System.out.println(obj.search("."));
     }
 }
