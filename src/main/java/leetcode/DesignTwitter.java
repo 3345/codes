@@ -1,5 +1,8 @@
 package leetcode;
 
+import com.google.gson.Gson;
+import org.junit.Test;
+
 import java.util.*;
 
 /**
@@ -28,21 +31,32 @@ public class DesignTwitter {
         /** Compose a new tweet. */
         public void postTweet(int userId, int tweetId) {
             if (tweets.containsKey(userId)) {
-                tweets.get(userId).next = new Node(System.currentTimeMillis(), tweetId);
+                Node oldHead = tweets.get(userId);
+                Node newHead = new Node(System.nanoTime(), tweetId);
+                newHead.next = oldHead;
+                tweets.put(userId, newHead);
             } else {
-                tweets.put(userId, new Node(System.currentTimeMillis(), tweetId));
+                tweets.put(userId, new Node(System.nanoTime(), tweetId));
             }
         }
 
         /** Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent. */
         public List<Integer> getNewsFeed(int userId) {
             List<Node> feedHeads = new ArrayList<>();
-            feedHeads.add(tweets.get(userId));
+            if (tweets.containsKey(userId)) {
+                feedHeads.add(tweets.get(userId));
+            }
+
             List<Integer> ans = new ArrayList<>();
 
-            for (Integer followee : following.get(userId)) {
-                feedHeads.add(tweets.get(followee));
+            if (following.containsKey(userId)) {
+                for (Integer followee : following.get(userId)) {
+                    if (tweets.containsKey(followee)) {
+                        feedHeads.add(tweets.get(followee));
+                    }
+                }
             }
+
 
             if (feedHeads.size() == 0) {
                 return ans;
@@ -50,10 +64,10 @@ public class DesignTwitter {
 
             for (int i = 0; i < 10; i++) {
                 Node mostRecent = null;
-                Long recentTime = Long.MAX_VALUE;
+                Long recentTime = Long.MIN_VALUE;
 
                 for (Node n : feedHeads) {
-                    recentTime = Math.min(recentTime, n.ts);
+                    recentTime = Math.max(recentTime, n.ts);
                     if (recentTime == n.ts) {
                         mostRecent = n;
                     }
@@ -64,9 +78,10 @@ public class DesignTwitter {
                 }
 
                 feedHeads.remove(mostRecent);
+                ans.add(mostRecent.tweetId);
 
                 if (feedHeads.size() == 0) {
-                    break;
+                    return ans;
                 }
             }
 
@@ -76,8 +91,12 @@ public class DesignTwitter {
 
         /** Follower follows a followee. If the operation is invalid, it should be a no-op. */
         public void follow(int followerId, int followeeId) {
-            if (following.containsKey(followeeId)) {
-                following.get(followeeId).add(followeeId);
+            if (followeeId == followerId) {
+                return;
+            }
+
+            if (following.containsKey(followerId)) {
+                following.get(followerId).add(followeeId);
             } else {
                 Set<Integer> set = new HashSet<>();
                 set.add(followeeId);
@@ -91,5 +110,19 @@ public class DesignTwitter {
                 following.get(followerId).remove(followeeId);
             }
         }
+
+
+    }
+
+    @Test
+    public void t() {
+        Twitter twitter = new Twitter();
+        twitter.postTweet(1, 5);
+        twitter.follow(1, 2);
+        twitter.follow(2,1);
+        twitter.postTweet(2, 6);
+        System.out.println(new Gson().toJson(twitter.getNewsFeed(1)));
+        System.out.println(new Gson().toJson(twitter.getNewsFeed(2)));
+
     }
 }
