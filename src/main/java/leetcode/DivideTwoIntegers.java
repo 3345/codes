@@ -12,7 +12,13 @@ public class DivideTwoIntegers {
     }
 
     public static long divideL(long dividend,long divisor) {
-        if (divisor == 1) return dividend;
+        if (divisor == 1) {
+            if (dividend > Integer.MAX_VALUE || dividend < Integer.MIN_VALUE) {
+                return Integer.MAX_VALUE;
+            }
+        }
+
+        if (dividend < 0 && divisor < 0) return divideL(-dividend, -divisor);
         if (divisor < 0) return -divideL(dividend, -divisor);
         if (dividend < 0) return -divideL(-dividend, divisor);
         if (divisor > dividend) return 0;
@@ -37,12 +43,16 @@ public class DivideTwoIntegers {
             bitcnt >>= 1;
         }
 
+        if (ans > Integer.MAX_VALUE || ans < Integer.MIN_VALUE) {
+            return Integer.MAX_VALUE;
+        }
         return ans;
     }
 
     @Test
     public void test() {
-        System.out.println(divide(5,2));
+        System.out.println(divide(9 ,
+                2));
     }
 
 }
