@@ -69,11 +69,11 @@ public class FindTheCelebrity {
 
 
         if (!map.containsKey(c)) {
-            map.put(c, new HashSet<Integer>());
+            map.put(c, new HashSet<>());
         }
 
         if (!noMap.containsKey(c)) {
-            noMap.put(c, new HashSet<Integer>());
+            noMap.put(c, new HashSet<>());
         }
 
 
