@@ -14,37 +14,43 @@ import java.util.*;
 public class MergeIntervals {
 
     public List<Interval> merge(List<Interval> intervals) {
-        TreeSet<Interval> treeSet = new TreeSet<Interval>(new IntervalComparator());
-        treeSet.addAll(intervals);
-        List<Interval> result = new ArrayList<Interval>();
-        Iterator<Interval> iterator = treeSet.iterator();
-        Interval i1 = iterator.next();
+        if (intervals == null) {
+            return new ArrayList<>();
+        }
 
-        while (true) {
-            if (iterator.hasNext()) {
-                Interval i2 = iterator.next();
-                Interval i = mergeTwo(i1, i2);
-                if (i != null) {
-                    i1 = i;
-                } else {
-                    result.add(i1);
-                    //result.add(i2);
-                    i1 = i2;
-                }
-            } else {
-                result.add(i1);
-                return result;
+        if (intervals.size() < 2) {
+            return intervals;
+        }
+
+        Collections.sort(intervals, new IntervalComparator());
+
+        int p = 0;
+
+        while (p < intervals.size() - 1) {
+            Interval merged = mergeTwo(intervals.get(p), intervals.get(p + 1));
+            if (merged == null) {
+                p++;
+                continue;
             }
 
+            intervals.remove(p);
+            intervals.remove(p);
+            intervals.add(p, merged);
         }
+
+        return intervals;
+
+
     }
 
+    //i1's start <= i2's start
     private Interval mergeTwo(Interval i1, Interval i2) {
-        Interval result = null;
-        if (i1.end >= i2.start) {
-            result = new Interval(i1.start, Math.max(i1.end, i2.end));
+
+        if (i2.start - i1.end > 0) {
+            return null;
         }
-        return result;
+
+        return new Interval(i1.start, Math.max(i1.end, i2.end));
     }
 
     public class Interval {
@@ -61,12 +67,7 @@ public class MergeIntervals {
             if (i1.start > i2.start)
                 return 1;
             if (i1.start == i2.start) {
-                if (i1.end == i2.end)
-                    return 0;
-                if (i1.end < i2.end)
-                    return -1;
-                else
-                    return 1;
+                return 0;
             }
             return -1;
         }
