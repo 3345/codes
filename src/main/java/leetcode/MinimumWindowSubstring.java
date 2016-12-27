@@ -2,6 +2,7 @@ package leetcode;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,8 +14,15 @@ public class MinimumWindowSubstring {
             return "";
         }
 
-        //char, index map
-        Map<Character, Integer> map = new HashMap<>();
+
+        if (t.length() > s.length()) {
+            return "";
+        }
+
+        //char, occurrence
+        Map<Character, Integer> occurrenceMap = new HashMap<>();
+
+        Map<Character, List<Integer>> map = new HashMap<>();
         //position in s
         LinkedList<Integer> list = new LinkedList<>();
 
@@ -24,11 +32,13 @@ public class MinimumWindowSubstring {
         int visited = 0;
 
         for (int i = 0; i < t.length(); i++) {
-            map.put(t.charAt(i), -1);
-        }
-
-        if (map.size() > s.length()) {
-            return "";
+            char c = t.charAt(i);
+            if (map.containsKey(c)) {
+                
+                map.put(c, map.get(c) + 1);
+            } else {
+                map.put(c, 1);
+            }
         }
 
         if (map.size() == 1) {
