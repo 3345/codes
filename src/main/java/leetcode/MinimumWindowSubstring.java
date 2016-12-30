@@ -2,8 +2,9 @@ package leetcode;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+
+import org.junit.Test;
 
 /**
  * Created by fyl on 12/26/16.
@@ -14,15 +15,24 @@ public class MinimumWindowSubstring {
             return "";
         }
 
-
         if (t.length() > s.length()) {
+            return "";
+        }
+
+        if (t.length() == 1) {
+            for (int i = 0; i < s.length(); i++) {
+                if (s.charAt(i) == t.charAt(0)) {
+                    return t.charAt(0) + "";
+                }
+            }
+
             return "";
         }
 
         //char, occurrence
         Map<Character, Integer> occurrenceMap = new HashMap<>();
 
-        Map<Character, List<Integer>> map = new HashMap<>();
+        Map<Character, LinkedList<Integer>> map = new HashMap<>();
         //position in s
         LinkedList<Integer> list = new LinkedList<>();
 
@@ -33,52 +43,51 @@ public class MinimumWindowSubstring {
 
         for (int i = 0; i < t.length(); i++) {
             char c = t.charAt(i);
-            if (map.containsKey(c)) {
-                
-                map.put(c, map.get(c) + 1);
+            if (occurrenceMap.containsKey(c)) {
+                occurrenceMap.put(c, occurrenceMap.get(c) + 1);
             } else {
-                map.put(c, 1);
-            }
-        }
-
-        if (map.size() == 1) {
-            for (int i = 0; i < s.length(); i++) {
-                if (s.charAt(i) == t.charAt(0)) {
-                    return t.charAt(0) + "";
-                } else {
-                    return "";
-                }
+                occurrenceMap.put(c, 1);
             }
         }
 
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (map.containsKey(c)) {
-                if (map.get(c) == -1) {
+                if (map.get(c).size() < occurrenceMap.get(c)) {
                     visited++;
-
                 } else {
-                    list.remove(map.get(c));
-
+                    list.remove(map.get(c).removeFirst());
                 }
 
-                list.add(i);
+            } else if (occurrenceMap.containsKey(c)){
+                LinkedList<Integer> l = new LinkedList<>();
+                map.put(c,l);
+                visited++;
+            } else {
+                continue;
+            }
 
-                if (visited >= map.size()) {
-                    if (list.getLast() - list.getFirst() < last - first) {
-                        last = list.getLast();
-                        first = list.getFirst();
-                    }
+            map.get(c).add(i);
+            list.add(i);
+
+            if (visited >= t.length()) {
+                if (list.getLast() - list.getFirst() < last - first) {
+                    last = list.getLast();
+                    first = list.getFirst();
                 }
-
             }
         }
 
-        if (visited < map.size()) {
+        if (visited < t.length()) {
             return "";
         } else {
             return s.substring(first, last + 1);
         }
 
+    }
+
+    @Test
+    public void t() {
+        System.out.println(minWindow("abc", "ab"));
     }
 }
