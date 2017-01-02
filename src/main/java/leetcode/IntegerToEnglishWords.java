@@ -1,5 +1,7 @@
 package leetcode;
 
+import org.junit.Test;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,13 +9,11 @@ import java.util.Map;
  * Created by fuyul on 12/31/2016.
  */
 public class IntegerToEnglishWords {
-    Map<Integer, String> numMap = new HashMap<>();
-    Map<Integer, String> tenthMap = new HashMap<>();
-    Map<Integer, String> tMap = new HashMap<>();
+    static Map<Integer, String> numMap = new HashMap<>();
+    static Map<Integer, String> tenthMap = new HashMap<>();
+    static Map<Integer, String> tMap = new HashMap<>();
 
-
-    public String numberToWords(int num) {
-        Map<Integer, String> numMap = new HashMap<>();
+    static {
         numMap.put(1, "One");
         numMap.put(2, "Two");
         numMap.put(3, "Three");
@@ -41,8 +41,16 @@ public class IntegerToEnglishWords {
         tMap.put(5, "Fifty");
         tMap.put(6, "Sixty");
         tMap.put(7, "Seventy");
-        tMap.put(8, "Eight");
+        tMap.put(8, "Eighty");
         tMap.put(9, "Ninety");
+    }
+
+
+    public String numberToWords(int num) {
+        if (num == 0) {
+            return "Zero";
+        }
+
 
         //2,147,483,647
         int g = num / 1000000000;
@@ -61,7 +69,6 @@ public class IntegerToEnglishWords {
         int m = num / 1000000;
 
         if (m != 0) {
-            sb.append(" ");
             convertThreeDigits(m, sb);
             sb.append(" Million");
             num -= m * 1000000;
@@ -70,7 +77,6 @@ public class IntegerToEnglishWords {
         int k = num / 1000;
 
         if (k != 0) {
-            sb.append(" ");
             convertThreeDigits(k, sb);
             sb.append(" Thousand");
             num -= k *  1000;
@@ -80,33 +86,42 @@ public class IntegerToEnglishWords {
             convertThreeDigits(num, sb);
         }
 
-        return sb.toString();
+        return sb.toString().trim();
     }
 
     public void convertThreeDigits(int num, StringBuilder sb) {
         int hundred = num / 100;
-        boolean hasH = false;
         if (hundred != 0) {
+            sb.append(" ");
             sb.append(numMap.get(hundred));
+            sb.append(" Hundred");
             num -= 100 * hundred;
-            hasH = true;
         }
 
         int tenth = num / 10;
 
         if (tenth == 1) {
+            sb.append(" ");
             sb.append(tenthMap.get(num));
         } else if (tenth == 0) {
             if (num > 0) {
-                if (hasH) {
-                    sb.append("And ");
-                }
+                sb.append(" ");
                 sb.append(numMap.get(num));
             }
         } else {
-            sb.append(tMap.get(tenth));
             sb.append(" ");
-            sb.append(numMap.get(num - tenth * 10));
+            sb.append(tMap.get(tenth));
+            num -= 10* tenth;
+            if (num > 0) {
+                sb.append(" ");
+                sb.append(numMap.get(num));
+            }
         }
     }
+
+    @Test
+    public void t() {
+        System.out.println(numberToWords(1001));
+    }
+
 }
