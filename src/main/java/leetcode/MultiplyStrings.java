@@ -10,6 +10,7 @@ import java.util.LinkedList;
  * Created by fuyul on 1/7/2017.
  */
 public class MultiplyStrings {
+    //this solution is retarded, check discuss
     public String multiply(String num1, String num2) {
         boolean neg1 = num1.charAt(0) == '-';
         boolean neg2 = num2.charAt(0) == '-';
@@ -47,7 +48,7 @@ public class MultiplyStrings {
 
         for (int i = s.length() - 1; i > -1; i--) {
             LinkedList<Integer> cur = mult(ln, Integer.parseInt(s.charAt(i) + ""));
-            for (int j = 0; j < i; j++) {
+            for (int j = 0; j < s.length() - 1 - i; j++) {
                 cur.add(0);
             }
             if (prev == null) {
@@ -63,7 +64,7 @@ public class MultiplyStrings {
             sb.append(prev.get(i));
         }
 
-        return sb.toString();
+        return sign + sb.toString();
     }
 
 
@@ -111,12 +112,14 @@ public class MultiplyStrings {
             int sum = n1.get(p1) + carry;
             ret.addFirst(sum % 10);
             carry = sum / 10;
+            p1 --;
         }
 
         while (p2 > -1) {
             int sum = n2.get(p2) + carry;
             ret.addFirst(sum % 10);
             carry = sum / 10;
+            p2 --;
         }
 
         if (carry > 0) {
@@ -131,13 +134,14 @@ public class MultiplyStrings {
         LinkedList<Integer> l1 = new LinkedList<>();
         LinkedList<Integer> l2 = new LinkedList<>();
 
+        l1.add(6);
         l1.add(1);
-        l1.add(2);
-        l1.add(3);
+        l1.add(5);
+        l1.add(0);
 
-        l2.add(9);
-        l2.add(8);
         l2.add(7);
+        l2.add(3);
+        l2.add(8);
 
         LinkedList<Integer> l = sum(l1, l2);
         System.out.println(new Gson().toJson(l));
@@ -162,6 +166,6 @@ public class MultiplyStrings {
 
     @Test
     public void test() {
-        System.out.println(multiply("123","456"));
+        System.out.println(multiply("-123","456"));
     }
 }
