@@ -7,49 +7,51 @@ import java.util.Set;
 
 /**
  * Created by fyl on 1/23/17.
+ * slow!!!!!!!!!!!!!!!!!!
  */
 public class GraphValidTree {
     public boolean validTree(int n, int[][] edges) {
-        Map<Integer, Set<Integer>> map = new HashMap<>();
-
         if (edges == null || edges.length == 0) {
-            return true;
+            return n == 0;
         }
 
-        for (int i = 0; i < edges.length; i ++) {
-            int min = Math.min(edges[i][0], edges[i][1]);
-            int max = Math.max(edges[i][0], edges[i][1]);
+        Map<Integer, Set<Integer>> unions = new HashMap<>();
 
-            if (map.containsKey(min)) {
-                map.get(min).add(max);
-            } else {
+        for(int i = 0; i < edges.length; i++) {
+            int e1 = edges[i][0];
+            int e2 = edges[i][1];
+
+            if (!unions.containsKey(e1)) {
                 Set<Integer> set = new HashSet<>();
-                set.add(max);
-                map.put(min, set);
+                set.add(e1);
+                unions.put(e1, set);
+            }
+
+            if (!unions.containsKey(e2)) {
+                Set<Integer> set = new HashSet<>();
+                set.add(e2);
+                unions.put(e2, set);
+            }
+
+
+
+        }
+        for(int i = 0; i < edges.length; i++) {
+            Set<Integer> set1 = unions.get(edges[i][0]);
+            Set<Integer> set2 = unions.get(edges[i][1]);
+
+            for (Integer e1 : set1) {
+                if (set2.contains(e1)) {
+                    return false;
+                }
+
+                set2.add(e1);
+                unions.put(e1, set2);
             }
         }
 
-        Set<Integer> visiting = new HashSet<>();
-        Set<Integer> visited = new HashSet<>();
-
+        return unions.get(0).size() == n;
 
     }
 
-    public boolean recur(Map<Integer, Set<Integer>> map, Set<Integer> visiting, Set<Integer> visited, Integer cur) {
-        if (visited.contains(cur)) {
-            return true;
-        }
-
-        if (visiting.contains(cur)) {
-            return false;
-        }
-
-        visiting.add(cur);
-
-        for (Integer v : map.get(cur)) {
-
-        }
-
-
-    }
 }
