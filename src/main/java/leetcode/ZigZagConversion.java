@@ -1,3 +1,8 @@
+package leetcode;
+
+import java.util.ArrayList;
+import java.util.List;
+
 class ZigZagConversion {
     public String convert(String s, int numRows) {
         if (s == null || s.length() < 1) {
