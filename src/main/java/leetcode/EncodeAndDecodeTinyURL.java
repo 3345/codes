@@ -8,21 +8,20 @@ import java.util.Map;
  */
 public class EncodeAndDecodeTinyURL {
     private Map<Integer, String> store = new HashMap<>();
-    private Map<Character, Integer> map = new HashMap<>();
-    private static int count = 0;
-    private static String elements = "";
+    private int count = 0;
+    private String elements = "";
 
-    static {
+    public EncodeAndDecodeTinyURL() {
         for (char c = '0'; c <= '9'; c++) {
-            EncodeAndDecodeTinyURL.elements += c;
+            this.elements += c;
         }
 
         for (char c = 'a'; c <= 'z'; c++) {
-            EncodeAndDecodeTinyURL.elements += c;
+            this.elements += c;
         }
 
         for (char c = 'A'; c <= 'Z'; c++) {
-            EncodeAndDecodeTinyURL.elements += c;
+            this.elements += c;
         }
     }
 
@@ -73,10 +72,7 @@ public class EncodeAndDecodeTinyURL {
 
     public static void main(String[] args) {
         EncodeAndDecodeTinyURL tinyURL = new EncodeAndDecodeTinyURL();
-        String longUrl = "http://www.google.com";
-        String shortUrl = tinyURL.encode(longUrl);
-        String decodedLongUrl = tinyURL.decode(shortUrl);
-        System.out.println(tinyURL.decode(tinyURL.encode("www.haha.com")));
-        System.out.println(tinyURL.decode(tinyURL.encode("www.haha1.com")));
+
+        System.out.println(tinyURL.decode(tinyURL.encode("http://animal.example.com/bee.php")));
     }
 }
