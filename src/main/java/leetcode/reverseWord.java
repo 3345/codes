@@ -5,23 +5,74 @@ import org.junit.Test;
 
 public class reverseWord {
     public String reverseWords(String str) {
-        char[] s = str.toCharArray();
-        int start = 0;
-        int end = s.length - 1;
-        s = reverse(s, start, end);
-        while (start < s.length - 1) {
-            while (s[start] == ' ') {
-                start++;
-            }
-            end = start + 1;
+        char[] arr = new char[str.length()];
 
-            while (end < s.length && s[end] != ' ') {
-                end ++;
+        int arrIndex = 0;
+        boolean firstSpace = false;
+
+        int s = 0;
+
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) != ' ') {
+                s = i;
+                break;
             }
-            reverse(s, start, end - 1);
-            start = end ++;
         }
-        return new String(s);
+
+        for (int i = str.length() - 1; i >= s; i--) {
+            char c = str.charAt(i);
+            if (c != ' ') {
+                firstSpace = true;
+                arr[arrIndex] = c;
+                arrIndex++;
+            } else {
+                if (firstSpace) {
+                    arr[arrIndex] = ' ';
+                    arrIndex++;
+                    firstSpace = false;
+                }
+            }
+        }
+
+
+
+        int start = 0;
+        int end = arr.length - 1;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == 0) {
+                if (start != i) {
+                    end = i - 1;
+                    this.reverse(arr, start, end);
+                }
+                break;
+
+            }
+            if (arr[i] == ' ') {
+                end = i - 1;
+                this.reverse(arr, start, end);
+                start = i + 1;
+            }
+        }
+
+        if (start == 0) {
+            this.reverse(arr, start, end);
+        } else if (start > end) {
+            this.reverse(arr, start, arr.length - 1);
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != 0) {
+                sb.append(arr[i]);
+            } else {
+                break;
+            }
+        }
+
+
+
+        return sb.toString();
     }
 
     private char[] reverse(char[] s, int start, int end) {
@@ -37,9 +88,7 @@ public class reverseWord {
 
     @Test
     public void t1() {
-        char[] a = {'a','b','c'};
-        System.out.println(reverse(a, 0, a.length-1));
-        String s = " the  blue  sky ";
+        String s = "hello hi";
         System.out.println(reverseWords(s));
     }
 }
