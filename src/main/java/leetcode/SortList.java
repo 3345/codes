@@ -1,115 +1,88 @@
 package leetcode;
 
-import dataStructure.MyNode;
-import org.junit.Test;
-
 /**
- *  5 2 3 8 7
- *  2 5 3 8 7
- *  2 3 5 8 7
- *  2 3 5 7 8
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
  */
 public class SortList {
-    public MyNode mergeSort(MyNode<Integer> head) {
-        if (head == null || head.next == null)
-            return head;
-        MyNode p1 = head;
-        MyNode p2 = head;
-        // 1 2 3 4
-        while (p2.next != null && p2.next.next != null) {
-            p1 = p1.next;
-            p2 = p2.next.next;
-        }
-        // 1 2 3 4
-        //  p1 p2
-
-        p2 = p1.next;
-        p1.next = null;
-        head = mergeSort(head);
-        p2 = mergeSort(p2);
-        return merge(head, p2);
+    public class ListNode {
+        int val;
+        ListNode next;
+        ListNode(int x) { val = x; }
     }
 
-    /**
-     *   h1        h2
-     *  {1, 4, 5} {2, 6, 7}
-     *  1, 2, 4, 5 {6, 7}
-     *
-     *
-     */
-    public MyNode merge(MyNode<Integer> p1, MyNode<Integer> p2) {
-        MyNode head = null;
-        MyNode p = null;
+    public ListNode sortList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
 
-        while (p1 != null && p2 != null) {
-            if (p1.data < p2.data) {
-                if (head == null) {
-                    head = p1;
-                    p = head;
-                } else {
-                    p.next = p1;
-                    p = p.next;
-                }
-                p1 = p1.next;
+        ListNode tail = head;
+        while (tail.next != null) {
+            tail = tail.next;
+        }
+
+        return mergeSort(head, tail);
+    }
+
+    public ListNode mergeSort(ListNode head, ListNode tail) {
+        if (head == tail) {
+            return head;
+        }
+
+        ListNode mid = findMid(head, tail);
+
+        return merge(mergeSort(head, mid), mergeSort(mid.next, tail));
+    }
+
+    //merge two sorted list
+    public ListNode merge(ListNode h1, ListNode h2) {
+        //dummy head, real head is dummy head next
+        ListNode h = new ListNode(0);
+        ListNode cur = h;
+
+        while (h1 != null && h2 != null) {
+            if (h1.val < h2.val) {
+                cur.next = h1;
+                h1 = h1.next;
             } else {
-                if (head == null) {
-                    head = p2;
-                    p = head;
-                } else {
-                    p.next = p2;
-                    p = p.next;
-                }
-                p2 = p2.next;
+                cur.next = h2;
+                h2 = h2.next;
             }
 
+            cur = cur.next;
         }
 
-        if (p1 != null) {
-            p.next = p1;
+         if (h1 != null) {
+             cur.next = h1;
+         }
+
+        if (h2 != null) {
+            cur.next = h2;
         }
 
-        if (p2 != null) {
-            p.next = p2;
-        }
-
-        return head;
+        return h.next;
     }
 
-    @Test
-    public void t1() {
-        MyNode<Integer> n = new MyNode(5);
-        MyNode<Integer> n1 = new MyNode(2);
-        MyNode<Integer> n2 = new MyNode(3);
-        MyNode<Integer> n3 = new MyNode(8);
-        MyNode<Integer> n4 = new MyNode(7);
+    public ListNode findMid(ListNode head, ListNode tail) {
+        ListNode cur = head;
+        int len = 0;
 
-        n.next = n1;
-        n1.next = n2;
-        n2.next = n3;
-        n3.next = n4;
-
-        MyNode result = mergeSort(n);
-        while (result != null) {
-            System.out.print(result.data + ",");
-            result = result.next;
+        while (cur != tail) {
+            cur = cur.next;
+            len++;
         }
+
+        cur = head;
+
+        for (int i = 0; i <= len / 2; i++) {
+            cur = cur.next;
+        }
+
+        return cur;
     }
 
-    @Test
-    public void t2() {
-        MyNode<Integer> n = new MyNode(2);
-        MyNode<Integer> n1 = new MyNode(5);
-        MyNode<Integer> n2 = new MyNode(3);
-
-        n.next = n1;
-
-        // n2.next = n3;
-        //n3.next = n4;
-
-        MyNode result = merge(n, n2);
-        while (result != null) {
-            System.out.print(result.data + ",");
-            result = result.next;
-        }
-    }
 }
