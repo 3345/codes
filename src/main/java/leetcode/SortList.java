@@ -1,5 +1,7 @@
 package leetcode;
 
+import org.junit.Test;
+
 /**
  * Definition for singly-linked list.
  * public class ListNode {
@@ -29,13 +31,19 @@ public class SortList {
     }
 
     public ListNode mergeSort(ListNode head, ListNode tail) {
+        if (head == null) {
+            return null;
+        }
+
         if (head == tail) {
             return head;
         }
 
         ListNode mid = findMid(head, tail);
+        ListNode head2 = mid.next;
+        mid.next = null;
 
-        return merge(mergeSort(head, mid), mergeSort(mid.next, tail));
+        return merge(mergeSort(head, mid), mergeSort(head2, tail));
     }
 
     //merge two sorted list
@@ -78,11 +86,28 @@ public class SortList {
 
         cur = head;
 
-        for (int i = 0; i <= len / 2; i++) {
+        for (int i = 0; i < len / 2; i++) {
             cur = cur.next;
         }
 
         return cur;
+    }
+
+    @Test
+    public void test() {
+        ListNode n1 = new ListNode(3);
+        ListNode n2 = new ListNode(8);
+        ListNode n3 = new ListNode(4);
+        ListNode n4 = new ListNode(2);
+        ListNode n5 = new ListNode(5);
+        n1.next = n2;
+        n2.next = n3;
+        n3.next = n4;
+        n4.next = n5;
+
+        ListNode sorted = sortList(n1);
+        System.out.println(sorted);
+
     }
 
 }
