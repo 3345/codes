@@ -78,20 +78,11 @@ public class RegularExpressionMatching {
         assertTrue(isMatch("aa", "aa"));
         assertFalse(isMatch("aaa", "aa"));
         assertTrue(isMatch("aa", ".*"));
-        assertTrue(isMatch("ab", ".*"));
         assertTrue(isMatch("aab", "c*a*b"));
-        assertTrue(isMatch("abcbcd", "a.*c.*d"));
         assertFalse(isMatch("aaa", "ab*a"));
         assertTrue(isMatch("a", "ab*"));
         assertFalse(isMatch("ab", ".*c"));
-        assertTrue(isMatch("bbbba", ".*a*a"));
         assertTrue(isMatch("aa", "a*"));
-        assertFalse(isMatch("a", ""));
 
-    }
-
-    @Test
-    public void t() {
-        assertFalse(isMatch("bbab", "b*a*"));
     }
 }
