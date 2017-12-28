@@ -19,23 +19,15 @@ public class BinaryTreeLevelOrderTraversalII {
         q.add(root);
 
         while (!q.isEmpty()) {
-            List<TreeNode> children = new ArrayList<>();
+            int size = q.size();
             List<Integer> subList = new ArrayList<>();
-
-            while (!q.isEmpty()) {
+            for (int i = 0; i < size; i++) {
                 TreeNode node = q.poll();
                 subList.add(node.val);
-                if (node.left != null) {
-                    children.add(node.left);
-                }
-
-                if(node.right != null) {
-                    children.add(node.right);
-                }
+                if (node.left != null) q.offer(node.left);
+                if (node.right != null) q.offer(node.right);
             }
-
             list.add(0, subList);
-            children.forEach(n -> q.add(n));
         }
 
         return list;
