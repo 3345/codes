@@ -2,9 +2,7 @@ package leetcode;
 
 import org.junit.Test;
 
-import java.util.HashSet;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by fyl on 5/23/19.
@@ -15,24 +13,36 @@ public class SuperUglyNumber {
             return 1;
         }
 
-        PriorityQueue<Long> q = new PriorityQueue<>();
-        q.offer(1L);
-
-        int count = 0;
-        long ret = 0;
-        while (count < n) {
-            long r = q.poll();
-            if (r == ret) {
-                continue;
-            }
-            ret = (int)r;
-            count++;
-            for (int i = 0; i < primes.length; i++) {
-                q.offer(ret * primes[i]);
-            }
+        long u = 1;
+        int count = 1;
+        int k = primes.length;
+        long[][] list = new long[k][n];
+        int[] p = new int[k];
+        for (int i = 0; i<k; i++) {
+            list[i][0] = (long)primes[i];
         }
-        return (int) ret;
+        while (count < n) {
+            // get min
+            long min = (long)Integer.MAX_VALUE;
 
+            for (int i = 0; i < k; i++) {
+                min = Math.min(min, list[i][p[i]]);
+            }
+            for (int i = 0; i < k; i++) {
+                if (min == list[i][p[i]]) {
+                    p[i]++;
+                }
+            }
+            if (min > u) {
+                u = min;
+                for (int j = 0; j < k; j++) {
+                    list[j][count]= primes[j]*u;
+                }
+                count++;
+            }
+
+        }
+        return (int) u;
     }
 
 
