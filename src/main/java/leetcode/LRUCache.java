@@ -1,122 +1,94 @@
 package leetcode;
 
+import org.junit.Test;
+
 import java.util.HashMap;
 
 public class LRUCache {
-    private int capacity;
-    private Node head;
-    private Node tail;
-    private HashMap<Integer, Node> map = new HashMap();
-    private int vol;
+    private int cap;
+    private HashMap<Integer, Node> map;
+    private DoublyLinkedList dList;
 
     public LRUCache(int capacity) {
-        this.capacity = capacity;
-
+        this.cap = capacity;
+        this.map = new HashMap<>();
+        this.dList = new DoublyLinkedList();
     }
 
     public int get(int key) {
-        if (!map.containsKey(key)) {
-            return  -1;
+        if (!this.map.containsKey(key)) {
+            return -1;
         }
 
-        Node n = map.get(key);
-
-        Node prev = n.prev;
-        Node next = n.next;
-
-        if (this.head != n) {
-            if (this.tail == n) {
-                prev.next = null;
-                this.tail = prev;
-            } else {
-                prev.next = next;
-                next.prev = prev;
-            }
-
-            addToHead(n);
-        }
-
-        return head.val;
+        Node node = this.map.get(key);
+        this.dList.remove(node);
+        this.dList.insertAfter(dList.head, node);
+        return node.val;
     }
 
-    public void set(int key, int value) {
-        if (capacity < 1) {
+    public void put(int key, int value) {
+        if (this.cap < 1) {
             return;
         }
-
-        if (this.map.containsKey(key)) {
-            Node n = this.map.get(key);
-            n.val = value;
-
-            Node prev = n.prev;
-            Node next = n.next;
-
-            if (this.head != n) {
-
-                if (this.tail == n) {
-                    prev.next = null;
-                    this.tail = prev;
-                } else {
-                    prev.next = next;
-                    next.prev = prev;
-
-
-                }
-                addToHead(n);
-                map.put(key, head);
-
+        Node n = new Node(key, value);
+        if (!this.map.containsKey(key)) {
+            this.dList.insertAfter(dList.head, n);
+            this.map.put(key,n);
+            if (map.size() > this.cap) {
+                this.map.remove(this.dList.tail.prev.key);
+                this.dList.remove(this.dList.tail.prev);
             }
         } else {
-            Node n = new Node(key, value);
-
-            if (this.vol < this.capacity) {
-                this.map.put(key, n);
-                this.vol ++;
-                addToHead(n);
-            } else if (this.vol == this.capacity){
-                if (tail == head) {
-                }
-
-                Node oldTail = this.tail;
-                this.tail = oldTail.prev;
-                if (this.tail != null) {
-                    this.tail.next = null;
-                }
-                this.map.remove(oldTail.key);
-
-                addToHead(n);
-            } else {
-                //cannot happen
-            }
-
-            map.put(key, head);
+            this.dList.remove(map.get(key));
+            this.dList.insertAfter(dList.head, n);
+            this.map.put(key, n);
         }
     }
 
-    private void addToHead(Node n) {
-        Node oldHead = head;
-        if (oldHead == null) {
-            head = n;
-            tail = n;
-        } else {
-            head = n;
-            oldHead.prev = head;
-            head.prev = null;
-            head.next = oldHead;
-        }
-
-    }
-
-    public class Node {
-        public int val;
-        public int key;
-        public Node next;
-        public Node prev;
+    class Node {
+        int val;
+        int key;
+        Node prev;
+        Node next;
 
         public Node(int key, int val) {
             this.val = val;
-            this.key=key;
+            this.key = key;
         }
     }
 
+    class DoublyLinkedList {
+        Node head;
+        Node tail;
+        public DoublyLinkedList() {
+            this.head = new Node(0,0);
+            this.tail = new Node(0,0);
+            this.head.next = this.tail;
+            this.tail.prev = this.head;
+        }
+
+        public void insertAfter(Node a, Node in) {
+            if (a == null) {
+                return;
+            }
+            Node b = a.next;
+            a.next = in;
+            in.prev = a;
+            in.next = b;
+            b.prev = in;
+
+        }
+
+        public void remove(Node n) {
+            if (n == null) {
+                return;
+            }
+            n.prev.next = n.next;
+            n.next.prev = n.prev;
+        }
+    }
 }
+
+
+
+

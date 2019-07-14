@@ -22,7 +22,6 @@ public class SuperUglyNumber {
             list[i][0] = (long)primes[i];
         }
         while (count < n) {
-            // get min
             long min = (long)Integer.MAX_VALUE;
 
             for (int i = 0; i < k; i++) {
