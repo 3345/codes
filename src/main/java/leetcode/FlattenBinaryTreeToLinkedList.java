@@ -3,38 +3,33 @@ package leetcode;
 import org.junit.Test;
 
 public class FlattenBinaryTreeToLinkedList {
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-        TreeNode(int x) { val = x; }
-    }
-
     public void flatten(TreeNode root) {
-        if (root == null)
-            return;
-        flat(root);
+        // write your code here
+        recur(root);
     }
 
-    public TreeNode flat(TreeNode root) {
-        TreeNode end;
-        if (root.left == null) {
-            if (root.right != null)
-                end = flat(root.right);
-            else
-                end = root;
-        }  else {
-            if (root.right != null) {
-                flat(root.left).right = root.right;
-                end = flat(root.right);
-                root.right = root.left;
-            } else {
-                end = flat(root.left);
-                root.right = root.left;
-            }
-            root.left = null;
+    public TreeNode recur(TreeNode n) {
+        if (n == null) {
+            return n;
         }
-        return end;
+
+        TreeNode l = recur(n.left);
+        TreeNode r = recur(n.right);
+        n.right = appendTail(l, r);
+        n.left = null;
+        return n;
+    }
+    //append n2 to n1
+    public TreeNode appendTail(TreeNode n1, TreeNode n2) {
+        if (n1 == null) {
+            return n2;
+        }
+        TreeNode tail = n1;
+        while (tail.right != null) {
+            tail = tail.right;
+        }
+        tail.right = n2;
+        return n1;
     }
 
     /**
