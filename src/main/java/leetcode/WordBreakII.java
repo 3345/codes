@@ -1,43 +1,59 @@
 package leetcode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import org.junit.Test;
+
+import java.util.*;
 
 /**
  * Created by yulai on 11/10/16.
  */
 public class WordBreakII {
+    Set<String> dict = new HashSet<>();
+    Map<String, List<String>> res = new HashMap<>();
+    String s;
 
-    public List<String> WordBreakII(String s, Set<String> wordDict) {
-        int len = s.length();
-        List<ArrayList<String>> dp = new ArrayList<ArrayList<String>>();
-        //ab {a,b}
-        for (int i = 0; i < len; i++) {
-            dp.add(new ArrayList<String>());
-            String subzero = s.substring(0, i + 1);
-            if (wordDict.contains(subzero)) {
-                dp.add(i, new ArrayList<String>(Arrays.asList(subzero)));
-            }
-            for (int j = 0; j < i; j++) {
-                if (dp.get(j) != null) {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        this.s = s;
+        for (String word : wordDict) {
+            this.dict.add(word);
+        }
+        this.dict.add("");
+        recur(0);
+        return this.res.get(s);
 
-                    String sub = s.substring(j + 1, i + 1);
-                    if (wordDict.contains(sub)) {
-                        List<String> prelist = dp.get(j);
-                        ArrayList<String> nlist = new ArrayList<String>();
-                        for (String ps : prelist) {
-                            nlist.add(ps + " " + sub);
-                        }
+    }
 
-                        dp.get(i).addAll(nlist);
-
-                    }
-                }
-            }
+    public void recur(int first) {
+        if (first > s.length() - 1) {
+            return;
         }
 
-        return dp.get(len - 1);
+        for (int i = first; i < s.length(); i++) {
+            String prefix = s.substring(first, i + 1);
+            if (!this.dict.contains(prefix)) {
+                continue;
+            }
+            String postfix = s.substring(i + 1, s.length());
+            List<String> result = new ArrayList<>();
+            if (postfix.isEmpty()) {
+                result.add(prefix);
+                this.res.put(prefix, result);
+                return;
+            }
+            if (!res.containsKey(postfix)) {
+                recur(i + 1);
+            }
+            for (String postfixRes : res.get(postfix)) {
+                result.add(prefix + " " + postfixRes);
+            }
+            this.res.put(prefix, result);
+        }
+    }
+
+    @Test
+    public void test() {
+        String s = "catsanddog";
+        List<String> d = Arrays.asList(new String[]{"cat", "cats", "and", "sand", "dog"});
+        wordBreak(s, d);
     }
 }
