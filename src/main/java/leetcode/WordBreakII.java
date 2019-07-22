@@ -17,7 +17,6 @@ public class WordBreakII {
         for (String word : wordDict) {
             this.dict.add(word);
         }
-        this.dict.add("");
         recur(0);
         return this.res.get(s);
 
@@ -33,7 +32,7 @@ public class WordBreakII {
             if (!this.dict.contains(prefix)) {
                 continue;
             }
-            String postfix = s.substring(i + 1, s.length());
+            String postfix = s.substring(i + 1);
             List<String> result = new ArrayList<>();
             if (postfix.isEmpty()) {
                 result.add(prefix);
