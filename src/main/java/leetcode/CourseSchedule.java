@@ -26,14 +26,12 @@ public class CourseSchedule {
 
 
         for (int j = 0; j < prerequisites.length; j++) {
-            for (int i = 0; i < prerequisites[0].length; i++) {
-                if (graph.containsKey(prerequisites[j][0])) {
-                    graph.get(prerequisites[j][0]).add(prerequisites[j][1]);
-                } else {
-                    Set<Integer> set = new HashSet<>();
-                    set.add(prerequisites[j][1]);
-                    graph.put(prerequisites[j][0], set);
-                }
+            if (graph.containsKey(prerequisites[j][0])) {
+                graph.get(prerequisites[j][0]).add(prerequisites[j][1]);
+            } else {
+                Set<Integer> set = new HashSet<>();
+                set.add(prerequisites[j][1]);
+                graph.put(prerequisites[j][0], set);
             }
         }
 
@@ -83,7 +81,7 @@ public class CourseSchedule {
 
     @Test
     public void t() {
-        int[][] p = {{0,1}, {1,0}};
+        int[][] p = {{0, 1}, {1, 0}};
 
         boolean b = canFinish(2, p);
         System.out.print(b);
