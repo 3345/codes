@@ -22,88 +22,66 @@ public class SortList {
             return null;
         }
 
-        ListNode tail = head;
-        while (tail.next != null) {
-            tail = tail.next;
-        }
-
-        return mergeSort(head, tail);
-    }
-
-    public ListNode mergeSort(ListNode head, ListNode tail) {
-        if (head == null) {
-            return null;
-        }
-
-        if (head == tail) {
+        ListNode head2 = partition(head);
+        if (head2 == null) {
             return head;
         }
 
-        ListNode mid = findMid(head, tail);
-        ListNode head2 = mid.next;
-        mid.next = null;
-
-        return merge(mergeSort(head, mid), mergeSort(head2, tail));
+        ListNode sorted1 = sortList(head);
+        ListNode sorted2 = sortList(head2);
+        return merge(sorted1, sorted2);
     }
 
-    //merge two sorted list
-    public ListNode merge(ListNode h1, ListNode h2) {
-        //dummy head, real head is dummy head next
-        ListNode h = new ListNode(0);
-        ListNode cur = h;
-
-        while (h1 != null && h2 != null) {
-            if (h1.val < h2.val) {
-                cur.next = h1;
-                h1 = h1.next;
+    private ListNode merge(ListNode head1, ListNode head2) {
+        ListNode dum = new ListNode(0);
+        ListNode cur = dum;
+        while(head1 != null && head2 != null) {
+            if (head1.val > head2.val) {
+                cur.next = head2;
+                head2 = head2.next;
             } else {
-                cur.next = h2;
-                h2 = h2.next;
+                cur.next = head1;
+                head1 = head1.next;
             }
-
             cur = cur.next;
         }
-
-         if (h1 != null) {
-             cur.next = h1;
-         }
-
-        if (h2 != null) {
-            cur.next = h2;
+        if (head1 != null) {
+            cur.next = head1;
         }
-
-        return h.next;
+        if (head2 != null) {
+            cur.next = head2;
+        }
+        return dum.next;
     }
 
-    public ListNode findMid(ListNode head, ListNode tail) {
-        ListNode cur = head;
-        int len = 0;
-
-        while (cur != tail) {
-            cur = cur.next;
-            len++;
+    //return last element of first segment
+    private ListNode partition(ListNode head) {
+        if (head == null || head.next == null) {
+            return null;
         }
 
-        cur = head;
+        ListNode slow = head;
+        ListNode fast = head;
 
-        for (int i = 0; i < len / 2; i++) {
-            cur = cur.next;
+        while(fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
         }
 
-        return cur;
+        ListNode head2 = slow.next;
+        slow.next = null;
+        return head2;
     }
 
     @Test
     public void test() {
-        ListNode n1 = new ListNode(3);
-        ListNode n2 = new ListNode(8);
-        ListNode n3 = new ListNode(4);
-        ListNode n4 = new ListNode(2);
-        ListNode n5 = new ListNode(5);
+        ListNode n1 = new ListNode(4);
+        ListNode n2 = new ListNode(2);
+        ListNode n3 = new ListNode(1);
+        ListNode n4 = new ListNode(3);
         n1.next = n2;
         n2.next = n3;
         n3.next = n4;
-        n4.next = n5;
 
         ListNode sorted = sortList(n1);
         System.out.println(sorted);
