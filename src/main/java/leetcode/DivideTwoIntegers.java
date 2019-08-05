@@ -7,51 +7,43 @@ import org.junit.Test;
  */
 
 public class DivideTwoIntegers {
-    public static int divide(int dividend, int divisor) {
-        return (int)divideL(dividend,divisor);
-    }
-
-    public static long divideL(long dividend,long divisor) {
-        if (divisor == 1) {
-            if (dividend > Integer.MAX_VALUE || dividend < Integer.MIN_VALUE) {
-                return Integer.MAX_VALUE;
-            }
-        }
-
-        if (dividend < 0 && divisor < 0) return divideL(-dividend, -divisor);
-        if (divisor < 0) return -divideL(dividend, -divisor);
-        if (dividend < 0) return -divideL(-dividend, divisor);
-        if (divisor > dividend) return 0;
-        if (divisor == 0) return Integer.MAX_VALUE;
-
-        long d = divisor;
-        long bitcnt = 1;
-        long ans = 0;
-
-        while (d < dividend) {
-            d <<= 1;
-            bitcnt <<= 1;
-        }
-
-        while (d >= divisor) {
-            while (dividend >= d) {
-                dividend -= d;
-                ans += bitcnt;
-            }
-
-            d >>= 1;
-            bitcnt >>= 1;
-        }
-
-        if (ans > Integer.MAX_VALUE || ans < Integer.MIN_VALUE) {
+    public int divide(int dividend, int divisor) {
+        if (divisor == 1) return dividend;
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
             return Integer.MAX_VALUE;
         }
-        return ans;
+        if (divisor == Integer.MIN_VALUE) return 0;
+
+        // a/b
+        int a = Math.abs(dividend);
+        int b = Math.abs(divisor);
+
+        int remain = a;
+        int q = 0;
+        while (remain >= b) {
+            int cur = b;
+            int curq = 0;
+            while (cur <= remain && cur > 0) {
+                if (curq == 0) {
+                    curq = 1;
+                } else {
+                    curq = curq+curq;
+                }
+                cur = cur << 1;
+            }
+            q += curq;
+            remain -= cur >>> 1;
+        }
+        if (dividend < 0 && divisor < 0 || dividend > 0 && divisor > 0) {
+            return q;
+        } else {
+            return 0-q;
+        }
     }
 
     @Test
     public void test() {
-        System.out.println(divide(9 ,
+        System.out.println(divide(2147483647,
                 2));
     }
 
