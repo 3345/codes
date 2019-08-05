@@ -11,92 +11,68 @@ import java.util.List;
  * Created by fyl on 12/5/16.
  */
 public class SerializeAndDeserializeBST {
-    public class Codec {
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        traverse(root, sb);
+        return sb.toString();
+    }
 
-        // Encodes a tree to a single string.
-        public String serialize(TreeNode root) {
-            List<Integer> arr = new ArrayList<>();
-            traverse(root, arr);
-            StringBuilder sb = new StringBuilder();
-            for (Integer i : arr) {
-                sb.append(this.itoa(i));
-            }
-            return sb.toString();
+    public void traverse(TreeNode node, StringBuilder sb) {
+        if (node == null) return;
+        sb.append(itoa(node.val));
+        traverse(node.left, sb);
+        traverse(node.right, sb);
+    }
+
+    private char[] itoa(int n) {
+        char[] arr = new char[4];
+        arr[0] = (char)((n >>> 24) & 0xFF);
+        arr[1] = (char)((n >>> 16) & 0xFF);
+        arr[2] = (char)((n >>> 8) & 0xFF);
+        arr[3] = (char)((n) & 0xFF);
+        return arr;
+    }
+
+    private int atoi(char[] arr) {
+        return (int)arr[0] << 24
+                | (int)arr[1] << 16
+                | (int)arr[2] << 8
+                | (int)arr[3];
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        int[] arr = new int[data.length()/4];
+        char[] ca = data.toCharArray();
+        for (int i = 0; i < data.length()/4; i++) {
+            arr[i] = atoi(new char[]{ca[4*i],ca[4*i+1],ca[4*i+2],ca[4*i+3]});
         }
+        return makeTree(arr, 0, arr.length-1);
+    }
 
-        // Decodes your encoded data to tree.
-        public TreeNode deserialize(String data) {
-            int len = data.length() / 4;
-            int[] a = new int[len];
-            for (int i = 0; i < data.length() / 4; i++) {
-                int num = this.atoi(data.substring(i*4, i*4 + 4));
-                a[i] = num;
+    private TreeNode makeTree(int[] arr, int start, int end) {
+        if (start > end) return null;
+        TreeNode n = new TreeNode(arr[start]);
+        int mid = end+1;
+        for (int i = start+1; i <= end; i++) {
+            if (arr[i] > arr[start]) {
+                mid = i;
+                break;
             }
-            return buildTree(a, 0, len);
         }
-
-        //inorder
-        private void traverse(TreeNode root, List<Integer> list) {
-            if (root == null) {
-                return;
-            }
-            list.add(root.val);
-            traverse(root.left, list);
-            traverse(root.right, list);
-        }
-
-        private TreeNode buildTree(int[] a, int s, int e) {
-            if (s >= e) {
-                return null;
-            }
-            TreeNode root = new TreeNode(a[s]);
-            if (e - s == 1) {
-                return root;
-            }
-            int mid = e;
-            for (int i = s + 1; i < e; i++) {
-                if (a[i] > a[s]) {
-                    mid = i;
-                    break;
-                }
-            }
-
-            root.left = buildTree(a, s + 1, mid);
-            root.right = buildTree(a, mid, e);
-            return root;
-        }
-
-        private String itoa(int num) {
-            String s = "";
-            int mask = 0xFF;
-            for (int i = 0; i < 4; i++) {
-                char seg = (char) (num & mask);
-                s = seg + s;
-                num = num >>> 8;
-            }
-            return s;
-        }
-
-        private int atoi(String s) {
-            int ret = 0;
-            for (int i = 0; i < 4; i++) {
-                char c = s.charAt(i);
-                int num = c << (3 - i) * 8;
-                ret = ret | num;
-            }
-            return ret;
-        }
-
+        n.left = makeTree(arr, start+1, mid-1);
+        n.right = makeTree(arr, mid, end);
+        return n;
     }
 
     @Test
     public void test() {
-        Codec codec = new Codec();
-        TreeNode n1 = new TreeNode(5);
-        n1.left = new TreeNode(1);
-        String s = codec.serialize(n1);
-        TreeNode n2 = codec.deserialize(s);
-        System.out.println(n2);
+        TreeNode n1 = new TreeNode(1);
+        TreeNode n2 = new TreeNode(2);
+        TreeNode n3 = new TreeNode(3);
+        n2.left = n1; n2.right = n3;
+        String s = serialize(n2);
+        deserialize(s);
     }
 
 
