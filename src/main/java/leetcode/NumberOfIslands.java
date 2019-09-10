@@ -6,43 +6,40 @@ import org.junit.Test;
  * Created by fyl on 11/26/16.
  */
 public class NumberOfIslands {
+    int[][] v;
+    char[][] g;
+    int h;
+    int w;
+
     public int numIslands(char[][] grid) {
-        if (grid == null || grid.length == 0) {
-            return 0;
-        }
+        if (grid == null || grid.length == 0 || grid[0].length == 0) return 0;
+        h = grid.length;
+        w = grid[0].length;
 
-        int h = grid.length;
-        int w = grid[0].length;
-        int count = 0;
+        g = grid;
+        v = new int[h][w];
+        int c = 0;
 
-        int[][] visited = new int[h][w];
-
-        for(int j = 0; j < h; j++) {
-            for (int i = 0; i < w; i ++) {
-                if (grid[j][i] == '1' && visited[j][i] == 0) {
-                    count++;
-                    expand(i, j, grid, visited);
+        for (int j = 0; j < h; j++) {
+            for (int i = 0; i < w; i++) {
+                if (g[j][i] == '1' && v[j][i] == 0) {
+                    c++;
+                    dfs(i, j);
                 }
             }
         }
 
-        return count;
+        return c;
     }
 
-    private void expand(int i, int j, char[][] grid, int[][] visited) {
-        int h = grid.length;
-        int w = grid[0].length;
-
-        if (i < 0 ||i >= w || j < 0 || j >= h || grid[j][i] == '0' || visited[j][i] == 1) {
-            return;
-        }
-
-        visited[j][i] = 1;
-
-        expand(i - 1, j, grid, visited);
-        expand(i + 1, j, grid, visited);
-        expand(i, j - 1, grid, visited);
-        expand(i, j + 1, grid, visited);
+    private void dfs(int i, int j) {
+        if (i < 0 || i >= w || j < 0 || j >= h) return;
+        if (v[j][i] != 0 || g[j][i] == '0') return;
+        v[j][i] = 1;
+        dfs(i+1, j);
+        dfs(i-1, j);
+        dfs(i, j+1);
+        dfs(i, j-1);
     }
 
     @Test

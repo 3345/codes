@@ -10,112 +10,54 @@ import java.util.List;
  */
 public class TextJustification {
     public List<String> fullJustify(String[] words, int maxWidth) {
-        List<String> ans = new ArrayList<>();
-
-        if (words == null || words.length == 0) {
-            return ans;
-        }
-
-        int[] arr = new int[words.length];
-
-        for (int i = 0; i < words.length; i++) {
-            arr[i] = words[i].length();
-        }
-
-
+        List<String> output = new ArrayList<>();
         int i = 0;
-        int curLen = 0;
-        int curLenNoSpace = 0;
-        int wordCount = 0;
-        boolean start = true;
+        while (i < words.length) {
+            int j = i + 1;
+            int len = words[i].length();
+            while (j < words.length && len + 1 + words[j].length() <= maxWidth) {
+                len += 1 + words[j].length();
+                j++;
+            }
 
-        while (i < arr.length) {
-            if (!start) {
-                curLen ++; //add a space
+            StringBuilder row = new StringBuilder();
+            if (j == words.length) {
+                for (int k = i; k < j; k++) {
+                    row.append(words[k]);
+                    pad(row, k != j - 1 ? 1 : maxWidth - row.length());
+                }
             } else {
-                start = false;
-            }
-
-            curLen += arr[i];
-
-            if (curLen <= maxWidth) {
-                curLenNoSpace += arr[i];
-                wordCount++;
-            }
-
-            if (curLen >= maxWidth) {
-                if (curLen > maxWidth) {
-                    i--;
-                }
-                addLine(maxWidth, ans, i, curLenNoSpace, wordCount, words);
-
-                curLen = 0;
-                curLenNoSpace = 0;
-                wordCount = 0;
-                start = true;
-            }
-
-            i++;
-        }
-
-        if (wordCount > 0) {
-            i--;
-            StringBuilder sb = new StringBuilder();
-            for (int j = 0; j < wordCount; j++) {
-                sb.append(words[i - wordCount + 1 + j]);
-                if (j < wordCount - 1) {
-                    sb.append(" ");
-                }
-            }
-
-            int len = maxWidth - sb.length();
-
-            for (int j = 0; j < len; j++) {
-                sb.append(" ");
-            }
-
-            ans.add(sb.toString());
-        }
-
-        return ans;
-    }
-
-    private void addLine(int maxWidth, List<String> ans, int i, int curLenNoSpace, int wordCount, String[] words) {
-        StringBuilder padding = new StringBuilder();
-        StringBuilder sb = new StringBuilder();
-
-
-        if (wordCount > 1) {
-            int baseSpace = (maxWidth - curLenNoSpace) / (wordCount - 1);
-            int extraSpace = (maxWidth - curLenNoSpace) % (wordCount - 1);
-            for (int j = 0; j < baseSpace; j++) {
-                padding.append(" ");
-            }
-
-            for (int j = 0; j < wordCount; j++) {
-                sb.append( words[i - wordCount + 1 + j]);
-                if (j < wordCount - 1) {
-                    sb.append(padding);
-                    if (extraSpace > 0) {
-                        sb.append(" ");
-                        extraSpace --;
+                if (j - i - 1 == 0) {
+                    row.append(words[i]);
+                    pad(row, maxWidth - words[i].length());
+                } else {
+                    len -= j - i - 1;
+                    int avg = (maxWidth - len) / (j - i - 1);
+                    int extra = (maxWidth - len) % (j - i - 1);
+                    for (int k = i; k < j; k++) {
+                        row.append(words[k]);
+                        if (k != j - 1) {
+                            pad(row, extra > 0 ? avg + 1 : avg);
+                            extra--;
+                        }
                     }
                 }
             }
-
-        } else {//word count == 1
-            sb.append(words[i]);
-            for (int j = 0; j < maxWidth - words[i].length(); j++) {
-                sb.append(" ");
-            }
+            output.add(row.toString());
+            i = j;
         }
+        return output;
+    }
 
-        ans.add(sb.toString());
+    private void pad(StringBuilder sb, int n) {
+        for (int i = 0; i < n; i++) {
+            sb.append(" ");
+        }
     }
 
     @Test
     public void t() {
-        String[] words = {"What","must","be","shall","be."};
-        fullJustify(words, 12);
+        String[] words = {"Science", "is", "what", "we", "understand", "well", "enough", "to", "explain", "to", "a", "computer.", "Art", "is", "everything", "else", "we", "do"};
+        fullJustify(words, 20);
     }
 }

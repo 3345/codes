@@ -21,7 +21,7 @@ public class MeetingRoomsII {
         if (intervals == null || intervals.length == 0) {
             return 0;
         }
-        Arrays.sort(intervals, (o1, o2) -> o1.start - o2.start);
+        Arrays.sort(intervals, (o1, o2) -> {return o1.start - o2.start;});
         PriorityQueue<Interval> q = new PriorityQueue<>((o1, o2) -> o1.end - o2.end);
         int rooms = 1;
         q.offer(intervals[0]);

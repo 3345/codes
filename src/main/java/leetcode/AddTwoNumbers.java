@@ -1,5 +1,9 @@
 package leetcode;
 
+import org.junit.Test;
+
+import java.util.Stack;
+
 /**
  You are given two linked lists representing two non-negative numbers.
  The digits are stored in reverse order and each of their nodes contain a single digit.
@@ -10,48 +14,51 @@ package leetcode;
  */
 public class AddTwoNumbers {
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        ListNode cur1 = l1;
-        ListNode cur2 = l2;
-        ListNode head = null;
-        ListNode cur3 = null;
+        ListNode c1 = l1;
+        ListNode c2 = l2;
         int carry = 0;
-        while (cur1 != null && cur2 != null) {
-            int val = cur1.val + cur2.val + carry;
-            int digit = val % 10;
-            carry = val/10;
-            if (head == null) {
-                head = new ListNode(digit);
-                cur3 = head;
-            } else {
-                cur3.next = new ListNode(digit);
-                cur3 = cur3.next;
-            }
-            cur1 = cur1.next;
-            cur2 = cur2.next;
+        ListNode dum = new ListNode(0);
+        ListNode cur = dum;
+        ListNode t = dum;
+
+        while (c1 != null && c2 != null) {
+            int s = c1.val+c2.val+carry;
+            carry = s/10;
+            s=s%10;
+            cur.next = new ListNode(s);
+            cur = cur.next;
+            t = cur;
+            c1 = c1.next;
+            c2 = c2.next;
         }
 
-        while (cur1 != null) {
-            int val = carry + cur1.val;
-            int digit = val % 10;
-            carry = val / 10;
-            cur3.next = new ListNode(digit);
-            cur1 = cur1.next;
-            cur3 = cur3.next;
+        if (c1!=null) {
+            cur.next = c1;
+            cur = cur.next;
+        }
+        if (c2!=null) {
+            cur.next = c2;
+            cur = cur.next;
+        }
+        while (cur!=null&&t!=cur) {
+            int s = cur.val+carry;
+            carry = s/10;
+            cur.val = s%10;
+            t = cur;
+            cur = cur.next;
+        }
+        if (carry != 0) {
+            t.next = new ListNode(1);
         }
 
-        while (cur2 != null) {
-            int val = carry + cur2.val;
-            int digit = val % 10;
-            carry = val / 10;
-            cur3.next = new ListNode(digit);
-            cur2 = cur2.next;
-            cur3 = cur3.next;
-        }
+        return dum.next;
+    }
 
-        if (carry > 0) {
-            cur3.next = new ListNode(carry);
-        }
-        return head;
+    @Test
+    public void test() {
+        ListNode l1 = new ListNode(5);
+        ListNode l2 = new ListNode(5);
+        addTwoNumbers(l1,l2);
     }
 }
 

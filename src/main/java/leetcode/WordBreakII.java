@@ -9,50 +9,52 @@ import java.util.*;
  */
 public class WordBreakII {
     Set<String> dict = new HashSet<>();
-    Map<String, List<String>> res = new HashMap<>();
-    String s;
+    String target = null;
+    List<String> ans = new ArrayList<>();
+    Map<String, List<String>> mem = new HashMap<>();
+    int maxLen = 0;
+    Set<Character> set = new HashSet<>();
 
     public List<String> wordBreak(String s, List<String> wordDict) {
-        this.s = s;
-        for (String word : wordDict) {
-            this.dict.add(word);
+        for (String w : wordDict) {
+            dict.add(w);
+            maxLen = Math.max(maxLen, w.length());
         }
-        recur(0);
-        return this.res.get(s);
 
+        this.target = s;
+        dfs(0);
+        return mem.getOrDefault(s, new ArrayList<>());
     }
 
-    public void recur(int first) {
-        if (first > s.length() - 1) {
-            return;
-        }
-
-        for (int i = first; i < s.length(); i++) {
-            String prefix = s.substring(first, i + 1);
-            if (!this.dict.contains(prefix)) {
-                continue;
+    private void dfs(int start) {
+        for (int i = start + 1; i < target.length() + 1 && i - start <= maxLen; i++) {
+            String prefix = target.substring(start, i);
+            String postfix = target.substring(i);
+            if (dict.contains(prefix)) {
+                if (postfix.isEmpty()) {
+                    mem.putIfAbsent(prefix, new ArrayList<>());
+                    mem.get(prefix).add(prefix);
+                    return;
+                }
+                if (!mem.containsKey(postfix)) {
+                    dfs(i);
+                }
+                if (mem.containsKey(postfix)) {
+                    List<String> res = mem.getOrDefault(prefix + postfix, new ArrayList<>());
+                    List<String> postfixRes = mem.get(postfix);
+                    for (String r : postfixRes) {
+                        res.add(prefix + " " + r);
+                    }
+                    mem.put(prefix + postfix, res);
+                }
             }
-            String postfix = s.substring(i + 1);
-            List<String> result = new ArrayList<>();
-            if (postfix.isEmpty()) {
-                result.add(prefix);
-                this.res.put(prefix, result);
-                return;
-            }
-            if (!res.containsKey(postfix)) {
-                recur(i + 1);
-            }
-            for (String postfixRes : res.get(postfix)) {
-                result.add(prefix + " " + postfixRes);
-            }
-            this.res.put(prefix, result);
         }
     }
 
     @Test
     public void test() {
-        String s = "catsanddog";
-        List<String> d = Arrays.asList(new String[]{"cat", "cats", "and", "sand", "dog"});
+        String s = "aaaaaaaaaaaaaaaaaaaaaa";
+        List<String> d = Arrays.asList(new String[]{"a", "aa", "aaa", "aaaa", "aaaaa", "aaaaaa", "aaaaaaa", "aaaaaaaa", "aaaaaaaaa", "aaaaaaaaaa"});
         wordBreak(s, d);
     }
 }
