@@ -3,101 +3,76 @@ package leetcode;
 import com.google.gson.Gson;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by fyl on 12/5/16.
  */
 public class SerializeAndDeserializeBST {
-    public class Codec {
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        traverse(root, sb);
+        return sb.toString();
+    }
 
-        // Encodes a tree to a single string.
-        public String serialize(TreeNode root) {
-            if (root == null) {
-                return "";
-            }
+    public void traverse(TreeNode node, StringBuilder sb) {
+        if (node == null) return;
+        sb.append(itoa(node.val));
+        traverse(node.left, sb);
+        traverse(node.right, sb);
+    }
 
-            LinkedList<TreeNode> q = new LinkedList<>();
-            q.add(root);
+    private char[] itoa(int n) {
+        char[] arr = new char[4];
+        arr[0] = (char)((n >>> 24) & 0xFF);
+        arr[1] = (char)((n >>> 16) & 0xFF);
+        arr[2] = (char)((n >>> 8) & 0xFF);
+        arr[3] = (char)((n) & 0xFF);
+        return arr;
+    }
 
-            StringBuilder sb = new StringBuilder();
+    private int atoi(char[] arr) {
+        return (int)arr[0] << 24
+                | (int)arr[1] << 16
+                | (int)arr[2] << 8
+                | (int)arr[3];
+    }
 
-            while (!q.isEmpty()) {
-                TreeNode n = q.removeFirst();
-                sb.append(n.val + ",");
-                if (n.left != null) {
-                    q.add(n.left);
-                }
-
-                if (n.right != null) {
-                    q.add(n.right);
-                }
-            }
-
-            return sb.toString();
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        int[] arr = new int[data.length()/4];
+        char[] ca = data.toCharArray();
+        for (int i = 0; i < data.length()/4; i++) {
+            arr[i] = atoi(new char[]{ca[4*i],ca[4*i+1],ca[4*i+2],ca[4*i+3]});
         }
+        return makeTree(arr, 0, arr.length-1);
+    }
 
-        // Decodes your encoded data to tree.
-        public TreeNode deserialize(String data) {
-            if (data == null || data.length() == 0) {
-                return null;
-            }
-
-            String[] arr = data.split(",");
-
-            TreeNode root = new TreeNode(Integer.parseInt(arr[0]));
-
-            for (int i = 1; i < arr.length; i++) {
-                put(root, new TreeNode(Integer.parseInt(arr[i])));
-            }
-
-            return root;
-        }
-
-        public void put(TreeNode root, TreeNode n) {
-            if (n.val > root.val) {
-                if (root.right == null) {
-                    root.right = n;
-                    return;
-                } else {
-                    put(root.right, n);
-                }
-            } else {
-                if (root.left == null) {
-                    root.left = n;
-                    return;
-                } else {
-                    put(root.left, n);
-                }
+    private TreeNode makeTree(int[] arr, int start, int end) {
+        if (start > end) return null;
+        TreeNode n = new TreeNode(arr[start]);
+        int mid = end+1;
+        for (int i = start+1; i <= end; i++) {
+            if (arr[i] > arr[start]) {
+                mid = i;
+                break;
             }
         }
-
-        @Test
-        public void t() {
-            TreeNode root = new TreeNode(2);
-            root.left = new TreeNode(1);
-            root.right = new TreeNode(3);
-
-            String s = serialize(root);
-            System.out.println(s);
-
-            TreeNode r = deserialize(s);
-            System.out.println(new Gson().toJson(r));
-        }
+        n.left = makeTree(arr, start+1, mid-1);
+        n.right = makeTree(arr, mid, end);
+        return n;
     }
 
     @Test
-    public void t() {
-        Codec codec = new Codec();
-        TreeNode root = new TreeNode(2);
-        root.left = new TreeNode(1);
-        root.right = new TreeNode(3);
-
-        String s = codec.serialize(root);
-        System.out.println(s);
-
-        TreeNode r = codec.deserialize(s);
-        System.out.println(new Gson().toJson(r));
+    public void test() {
+        TreeNode n1 = new TreeNode(1);
+        TreeNode n2 = new TreeNode(2);
+        TreeNode n3 = new TreeNode(3);
+        n2.left = n1; n2.right = n3;
+        String s = serialize(n2);
+        deserialize(s);
     }
 
 

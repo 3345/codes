@@ -36,31 +36,6 @@ public class SubarrayswithKDifferentIntegers {
         return res;
     }
 
-//    private int atMost(int[] A, int K) {
-//        int i = 0, j = 0;
-//        int total = 0;
-//        int distinct = 0;   // count of distinct numbers in the window.
-//        Map<Integer, Integer> counter = new HashMap<>();
-//        while (j < A.length) {
-//            if (counter.getOrDefault(A[j], 0) == 0) {
-//                distinct++;
-//            }
-//            counter.put(A[j], 1 + counter.getOrDefault(A[j], 0));
-//            j++;
-//            while (i < j && distinct > K) {  // shrink the left boundary of window.
-//                counter.put(A[i], counter.get(A[i]) - 1);
-//                if (counter.get(A[i]) == 0) {
-//                    distinct--;
-//                }
-//                i++;
-//            }
-//
-//            total += j - i;
-//        }
-//
-//        return total;
-//    }
-
     @Test
     public void test() {
         int[] a = new int[]{1, 2, 1, 2, 3};

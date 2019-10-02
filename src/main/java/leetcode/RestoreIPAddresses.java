@@ -3,7 +3,9 @@ package leetcode;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  Given a string containing only digits, restore it by returning all possible valid IP address combinations.
@@ -14,38 +16,46 @@ import java.util.List;
  return ["255.255.11.135", "255.255.111.35"]. (Order does not matter)
  */
 public class RestoreIPAddresses {
+    List<String> output = new ArrayList<>();
+    String s;
     public List<String> restoreIpAddresses(String s) {
-        List<String> result = new ArrayList<String>();
-        if (s.length() <= 12 && s.length() >= 4)
-            ip(s, "", 3, 0, result);
-        return result;
+        this.s = s;
+        recur(0, 4, "");
+        return output;
     }
 
-    public void ip(String s, String partial, int level, int start, List<String> result) {
-        if (level < 0)
-            return;
-
-        if (level == 0) {
-            if (start >= s.length() - 3 && start < s.length()) {
-                String label = s.substring(start, s.length());
-                if (Integer.parseInt(label) < 256 && !(label.length() > 1 && label.charAt(0) == '0'))
-                    result.add(partial + label);
+    public void recur(int start, int remain, String cur) {
+        if (remain == 0) {
+            if (start == s.length()) {
+                output.add(cur);
             }
+        }
+
+        int len = s.length() - start;
+        if (len > 3*remain) {
             return;
         }
 
-        for (int i = start; i < start + 3; i++) {
-            if (i >= s.length())
+        for (int i = 1; i < 4; i++) {
+            if (start+i > s.length()) {
                 break;
-            String label = s.substring(start, i + 1);
-            if (Integer.parseInt(label) <= 255 && !(label.length() > 1 && label.charAt(0) == '0'))
-                ip(s, partial + label + ".", level - 1, i + 1, result);
+            }
+            String digits = s.substring(start,start+i);
+            if (digits.length() > 0 && digits.charAt(0) == '0') {
+                break;
+            }
+            int num = Integer.parseInt(digits);
+            if (num < 256) {
+                if (!cur.isEmpty()) {
+                    digits = cur+"."+digits;
+                }
+                recur(start+i, remain-1, digits);
+            }
         }
     }
-
     @Test
     public void test() {
-        String s = "010010";
+        String s = "0000";
         System.out.println(restoreIpAddresses(s));
     }
 }
