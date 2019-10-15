@@ -5,3 +5,4 @@ target
 .DS_Store
 *.xml
 Solution.java
+pom.xml
